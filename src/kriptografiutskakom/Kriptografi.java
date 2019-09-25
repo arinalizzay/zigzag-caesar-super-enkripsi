@@ -20,7 +20,7 @@ public class Kriptografi extends javax.swing.JFrame {
     }
     
     private String encrypt(String plain, int key) {
-        String chiper;
+        String chiper = "Masukkan Key !";
             chiper = "";
             for (int i=0; i<plain.length(); i++) {
                 char c = plain.charAt(i);
@@ -45,14 +45,15 @@ public class Kriptografi extends javax.swing.JFrame {
 	        else {
 	        	chiper += c;
 	        }
-            }System.out.println("Subtitusi Enkrip : "+chiper);
+            }System.out.println("Subtitusi : "+chiper);
             System.out.println("");
         return chiper;
         
+//        return "encrypted";
     }
      
      private String decrypt(String chiper, int key) {
-        String plain;
+        String plain = "Masukkan Key !";
        
             plain = "";
             for (int i=0; i<chiper.length(); i++) {
@@ -79,34 +80,33 @@ public class Kriptografi extends javax.swing.JFrame {
 	        	plain += c;
 	        }
             }
-            System.out.println("Subtitusi dekrip : "+plain);
         return plain;
     }
      
 
-String encrypt2(String plain, int key) {
+String RFEncryptionWork(String text, int key) {
         int move = 1;
         int count = 0;
-        String[][] matrik = new String[key][plain.length()];
+        String[][] rfp = new String[key][text.length()];
 
         // arrange dot fence
-        for (int x = 0; x < matrik.length; x++) {
-            for (int y = 0; y < matrik[x].length; y++) {
-                matrik[x][y] = ".";
+        for (int x = 0; x < rfp.length; x++) {
+            for (int y = 0; y < rfp[x].length; y++) {
+                rfp[x][y] = ".";
             }
         }
 
         // formatting according fence rails
-        for (int i = 0; i < plain.length(); i++) {
+        for (int i = 0; i < text.length(); i++) {
             if ((move % 2) != 0) {
-                matrik[count][i] = "" + plain.charAt(i);
+                rfp[count][i] = "" + text.charAt(i);
                 if (count == (key - 1)) {
                     move = 2;
                     count = (key - 2);
                 } else
                     count++;
             } else if ((move % 2) == 0) {
-                matrik[count][i] = "" + plain.charAt(i);
+                rfp[count][i] = "" + text.charAt(i);
                 if (count == 0) {
                     move = 1;
                     count = 1;
@@ -117,18 +117,18 @@ String encrypt2(String plain, int key) {
         }
 
         //replace any white space with X or random
-        for (int x = 0; x < matrik.length; x++) {
-            for (int y = 0; y < matrik[x].length; y++) {
-                if (matrik[x][y].equals(" "))
-                    matrik[x][y] = " ";
+        for (int x = 0; x < rfp.length; x++) {
+            for (int y = 0; y < rfp[x].length; y++) {
+                if (rfp[x][y].equals(" "))
+                    rfp[x][y] = " ";
             }
         }
 
         // display
         System.out.println("Permutasi Zigzagnya : ");
-        for (int i = 0; i < matrik.length; i++) {
-            for (int u = 0; u < matrik[i].length; u++) {
-                System.out.print("" + matrik[i][u] );
+        for (int i = 0; i < rfp.length; i++) {
+            for (int u = 0; u < rfp[i].length; u++) {
+                System.out.print("" + rfp[i][u] );
             }
             System.out.println();
         }
@@ -136,10 +136,10 @@ String encrypt2(String plain, int key) {
 
         StringBuilder cb = new StringBuilder();
         //encode string from fence
-        for (int i = 0; i < matrik.length; i++) {
-            for (int u = 0; u < matrik[i].length; u++) {
-                if (!".".equals(matrik[i][u])) {
-                    cb.append(matrik[i][u]);
+        for (int i = 0; i < rfp.length; i++) {
+            for (int u = 0; u < rfp[i].length; u++) {
+                if (!".".equals(rfp[i][u])) {
+                    cb.append(rfp[i][u]);
                 }
             }
         }
@@ -147,12 +147,12 @@ String encrypt2(String plain, int key) {
         return "" + cb;
     }
 
-String decrypt2(String chiper, int key) {
-        String[][] matrik = new String[key][chiper.length()];
+String RFDecryptionWork(String text, int key) {
+        String[][] rfp = new String[key][text.length()];
 
-        for (int x = 0; x < matrik.length; x++) {
-            for (int y = 0; y < matrik[x].length; y++) {
-                matrik[x][y] = ".";
+        for (int x = 0; x < rfp.length; x++) {
+            for (int y = 0; y < rfp[x].length; y++) {
+                rfp[x][y] = ".";
             }
         }
 
@@ -163,15 +163,15 @@ String decrypt2(String chiper, int key) {
         int init = (2 * key) - 2;
         a = init - 2;
         b = 2;
-        for (int i = 0; i < matrik.length; i++) {
+        for (int i = 0; i < rfp.length; i++) {
             c = 0;
-            for (int u = i; u < matrik[i].length;) {
-                if (count != chiper.length()) {
+            for (int u = i; u < rfp[i].length;) {
+                if (count != text.length()) {
                     if (i == 0 || i == key - 1) {
-                        matrik[i][u] = "" + chiper.charAt(count);
+                        rfp[i][u] = "" + text.charAt(count);
                         u = u + init;
                     } else {
-                        matrik[i][u] = "" + chiper.charAt(count);
+                        rfp[i][u] = "" + text.charAt(count);
                         if (c % 2 == 0)
                             u = u + a;
                         else if (c % 2 == 1)
@@ -191,10 +191,10 @@ String decrypt2(String chiper, int key) {
 
         //display
         //System.out.println("\n\nDecrypting..list into table");
-        System.out.println("Zigzag Dekrip : ");
-        for (int i = 0; i < matrik.length; i++) {
-            for (int u = 0; u < matrik[i].length; u++) {
-                System.out.print(matrik[i][u] + " ");
+
+        for (int i = 0; i < rfp.length; i++) {
+            for (int u = 0; u < rfp[i].length; u++) {
+                System.out.print(rfp[i][u] + " ");
             }
             System.out.println();
         }
@@ -202,16 +202,16 @@ String decrypt2(String chiper, int key) {
         int move = 1;
         count = 0;
         String sb = "";
-        for (int i = 0; i < chiper.length(); i++) {
+        for (int i = 0; i < text.length(); i++) {
             if ((move % 2) != 0) {
-                sb = sb + matrik[count][i];
+                sb = sb + rfp[count][i];
                 if (count == (key - 1)) {
                     move = 2;
                     count = (key - 2);
                 } else
                     count++;
             } else if ((move % 2) == 0) {
-                sb = sb + matrik[count][i];
+                sb = sb + rfp[count][i];
                 if (count == 0) {
                     move = 1;
                     count = 1;
@@ -308,9 +308,9 @@ String decrypt2(String chiper, int key) {
 
         jLabel10.setText("Plain Text");
 
-        jLabel11.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Documents\\NetBeansProjects\\KriptografiUTSkakom\\src\\kriptografiutskakom\\image\\Untitled-1.png")); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon("E:\\Untitled-1.png")); // NOI18N
 
-        jLabel12.setIcon(new javax.swing.ImageIcon("C:\\Users\\User\\Documents\\NetBeansProjects\\KriptografiUTSkakom\\src\\kriptografiutskakom\\image\\Untitled-3.png")); // NOI18N
+        jLabel12.setIcon(new javax.swing.ImageIcon("E:\\Untitled-3.png")); // NOI18N
 
         jLabel4.setText("Arinal Izza Yudhistira (081611633027)");
 
@@ -329,19 +329,8 @@ String decrypt2(String chiper, int key) {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 30, Short.MAX_VALUE)
+                                .addGap(0, 40, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addComponent(jLabel3)
-                                                .addGap(21, 21, 21))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jLabel2))
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(64, 64, 64)
-                                        .addComponent(jLabel11))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addGroup(layout.createSequentialGroup()
@@ -363,9 +352,19 @@ String decrypt2(String chiper, int key) {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel9)
                                             .addComponent(jLabel10)
-                                            .addComponent(dekripsi)
-                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(10, 10, 10))))
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(dekripsi)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(jLabel3)
+                                                .addGap(21, 21, 21))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel2))
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(64, 64, 64)
+                                        .addComponent(jLabel11))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(8, 8, 8)
                                 .addComponent(jLabel4)
@@ -388,19 +387,15 @@ String decrypt2(String chiper, int key) {
                         .addComponent(jLabel3))
                     .addComponent(jLabel12)
                     .addComponent(jLabel11))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addComponent(jLabel5)))
-                        .addGap(5, 5, 5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10)
-                        .addGap(44, 44, 44)))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel8))))
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(keyy, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
@@ -414,8 +409,8 @@ String decrypt2(String chiper, int key) {
                                 .addGap(36, 36, 36)
                                 .addComponent(jLabel7))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel8)))
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel10)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(enkripsi)
@@ -436,7 +431,7 @@ String decrypt2(String chiper, int key) {
         String key = keyy.getText();
         String plain = text1.getText();
         String chiper1 = this.encrypt(plain, key.length());
-        String chiper2 = this.encrypt2(chiper1, key.length());
+        String chiper2 = this.RFEncryptionWork(chiper1, key.length());
         text2.setText(chiper2);
     }//GEN-LAST:event_enkripsiActionPerformed
 
@@ -451,7 +446,7 @@ String decrypt2(String chiper, int key) {
         // TODO add your handling code here:
         String key = keyy.getText();
         String chiper = text2.getText();
-        String plain2 = this.decrypt2(chiper, key.length());
+        String plain2 = this.RFDecryptionWork(chiper, key.length());
         String plain = this.decrypt(plain2, key.length());
         text1.setText(plain);
     }//GEN-LAST:event_dekripsiActionPerformed
